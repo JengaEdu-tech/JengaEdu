@@ -432,7 +432,21 @@ async function login(){
  audit("Logged in via Supabase");
  show("Dashboard");
 }
-
+async function signInWithGitHub(){
+  if(!cloudConfigured()){
+    toast("Supabase is not configured.");
+    return;
+  }
+  if(!cloud && !initCloud()){
+    toast("Supabase connection could not be initialized.");
+    return;
+  }
+  const {error}=await cloud.auth.signInWithOAuth({
+    provider:"github",
+    options:{redirectTo:"https://jengaedu-tech.github.io/JengaEdu/workspace.html"}
+  });
+  if(error)toast(error.message||"GitHub sign-in could not be started.");
+}
 async function logout(){audit("Logged out");await cloudLogout();currentUser=null;document.getElementById("app").classList.add("hidden");document.getElementById("login").classList.remove("hidden");document.getElementById("loginPass").value=""}
 function forgot(){
   if(!cloudConfigured()){toast("Configure Supabase first");return}
