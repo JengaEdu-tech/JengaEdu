@@ -74,7 +74,7 @@ serve(async (req) => {
 
     // Consent and phone ownership are rechecked against the authenticated shared database,
     // not trusted from the browser request.
-    const stateResponse = await fetch(`${supabaseUrl}/rest/v1/school_state_shared?id=eq.KAPNANDA&select=data`, { headers: { apikey: anonKey, Authorization: `Bearer ${token}` } });
+    const stateResponse = await fetch(`${supabaseUrl}/rest/v1/school_state_shared?id=eq.JengaEdu&select=data`, { headers: { apikey: anonKey, Authorization: `Bearer ${token}` } });
     if (!stateResponse.ok) return json({ error: "Could not verify learner contacts and consent in the school database." }, 403);
     const stateRows = await stateResponse.json(), learners = stateRows?.[0]?.data?.learners || [];
     const matched: any[] = [];
