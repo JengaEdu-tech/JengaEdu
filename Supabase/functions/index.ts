@@ -1,4 +1,4 @@
-// Kapnanda school messaging gateway.
+// JengaEdu school messaging gateway.
 // All provider secrets remain in Supabase Edge Function environment variables.
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
