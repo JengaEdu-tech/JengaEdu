@@ -1,0 +1,23 @@
+Feature acceptance specification
+Lesson attendance
+Teacher selects class, subject, date and lesson number; enrolled learner list is loaded from the school's learner records.
+Per learner status: Present, Absent, Late, Excused.
+Save records against school, teacher, class, subject, date and lesson.
+Summary filters: class, subject, teacher and date range; show counts and attendance percentages.
+Corrections are permission-controlled and auditable.
+Records of work
+Choose grade/subject and curriculum design; suggest strand, sub-strand, topic, outcomes and learning experiences.
+Save date taught, planned/taught lesson count, and remarks/challenges.
+Curriculum suggestions show source and verification state.
+Teacher-selected content
+Allow selecting strand/sub-strand and adding a custom topic/lesson.
+Set entry_source = teacher-entered and curriculum source teacher-entered.
+Never label custom entries as official curriculum content.
+Shared data / TPAD
+Lesson attendance and records of work are the source records; summaries and TPAD evidence should reference them rather than re-enter the same data.
+TPAD preparation can select records by teacher, date range, class and subject, then attach or cite evidence.
+Appraisal evidence export should include record date, lesson details, reflection and evidence links.
+School boundaries
+Every record has a school_id. Staff access must be checked against the JengaEdu school membership/role system.
+Teachers create/edit their own entries; heads/authorized administrators can view school-wide summaries.
+Test tenant isolation before enabling shared staff access.
