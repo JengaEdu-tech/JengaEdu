@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102a72">
+  <title>JengaEdu AI Lesson Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">J</div><div><b>JengaEdu</b><small>AI Lesson Studio</small></div></div>
+    <div class="top-actions"><span class="pill">CBC / CBE aligned workflow</span><button id="signOutBtn" class="ghost hidden">Sign out</button></div>
+  </header>
+  <main class="shell">
+    <section class="hero">
+      <div><p class="eyebrow">TEACHER WORKSPACE</p><h1>Turn your lesson plan into an engaging teaching video.</h1>
+      <p class="sub">Create a structured lesson, review animated scenes, add English narration and prepare a video for your learners.</p></div>
+      <div class="hero-art"><div class="orb">▶</div><div class="hero-tag">PLAN · VISUALISE · TEACH</div></div>
+    </section>
+
+    <section id="authPanel" class="panel auth-panel">
+      <div><h2>Sign in to JengaEdu</h2><p class="muted">Teachers and administrators only. Connect your school's Supabase project in Settings below.</p></div>
+      <div class="auth-row"><input id="email" type="email" placeholder="School email"><input id="password" type="password" placeholder="Password"><button id="signInBtn" class="primary">Sign in</button></div>
+      <p id="authStatus" class="status">Demo mode is available until Supabase is configured.</p>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel side-panel">
+        <h3>Studio menu</h3>
+        <button class="nav active">✦ Create lesson video</button>
+        <button class="nav" id="savedNav">▤ My lesson projects</button>
+        <button class="nav" id="curriculumNav">▦ Curriculum records</button>
+        <div class="side-note"><b>Teacher control</b><p>AI-generated content is a draft. Review curriculum alignment, examples and assessment before sharing.</p></div>
+        <div class="connection"><span class="dot" id="connectionDot"></span><span id="connectionText">Demo workspace</span></div>
+      </aside>
+
+      <section class="main-column">
+        <div class="panel">
+          <div class="section-head"><div><p class="eyebrow">STEP 01</p><h2>Lesson details</h2></div><span class="step">1 / 3</span></div>
+          <div class="form-grid">
+            <label>Education level<select id="level"><option>ECDE</option><option>Lower Primary</option><option>Upper Primary</option><option selected>Junior School</option><option>Senior School</option></select></label>
+            <label>Grade / class<input id="grade" placeholder="e.g. Grade 7" value="Grade 7"></label>
+            <label>Learning area / subject<input id="subject" placeholder="e.g. Integrated Science" value="Integrated Science"></label>
+            <label>Duration<select id="duration"><option value="3">3 minutes</option><option value="5" selected>5 minutes</option><option value="8">8 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option></select></label>
+            <label class="wide">Strand<input id="strand" placeholder="Enter exact strand from the applicable KICD design"></label>
+            <label class="wide">Sub-strand<input id="substrand" placeholder="Enter exact sub-strand from the applicable KICD design"></label>
+            <label class="wide">Specific learning outcome<textarea id="outcome" rows="2" placeholder="Paste the verified learning outcome from the curriculum design"></textarea></label>
+            <label class="wide">Lesson topic<input id="topic" placeholder="e.g. Introduction to photosynthesis"></label>
+            <label class="wide">Teacher notes / key points<textarea id="notes" rows="3" placeholder="Add examples, local context, vocabulary or points the video must cover."></textarea></label>
+          </div>
+          <div class="notice">Curriculum accuracy: use the official curriculum design for the selected grade and learning area. The generator will preserve the strand, sub-strand and outcome you provide; it will not claim that unverified AI suggestions are official KICD content.</div>
+          <div class="actions"><button id="generateBtn" class="primary">Generate lesson script <span>→</span></button><button id="demoBtn" class="secondary">Try sample lesson</button></div>
+          <p id="generateStatus" class="status"></p>
+        </div>
+
+        <div id="editorPanel" class="panel hidden">
+          <div class="section-head"><div><p class="eyebrow">STEP 02</p><h2>Review lesson storyboard</h2></div><span class="step">2 / 3</span></div>
+          <div class="editor-meta"><span id="lessonTitle"></span><span class="pill">English narration</span></div>
+          <label>Learning introduction<textarea id="intro" rows="3"></textarea></label>
+          <label>Teaching explanation<textarea id="explanation" rows="5"></textarea></label>
+          <label>Real-life examples<textarea id="examples" rows="3"></textarea></label>
+          <label>Assessment questions<textarea id="assessment" rows="4"></textarea></label>
+          <div class="scene-head"><h3>Animated scene plan</h3><span class="muted">Edit scene descriptions before rendering</span></div>
+          <div id="sceneList" class="scene-list"></div>
+          <div class="actions"><button id="saveBtn" class="secondary">Save project</button><button id="renderBtn" class="primary">Create narrated video →</button></div>
+          <p id="renderStatus" class="status"></p>
+        </div>
+
+        <div id="projectsPanel" class="panel hidden">
+          <div class="section-head"><div><p class="eyebrow">YOUR WORK</p><h2>My lesson projects</h2></div><button id="backBtn" class="secondary">Back to studio</button></div>
+          <div id="projectList" class="project-list"></div>
+        </div>
+
+        <div id="curriculumPanel" class="panel hidden">
+          <div class="section-head"><div><p class="eyebrow">SCHOOL CURRICULUM</p><h2>Curriculum records</h2></div></div>
+          <p class="muted">This starter module accepts verified curriculum details entered by an authorised administrator. Import and validate your school's KICD curriculum-design records before enabling curriculum pick-lists.</p>
+          <div class="notice">Recommended record fields: education level, grade, learning area, strand, sub-strand, specific learning outcomes, suggested learning experiences, assessment guidance, source document title, version and page number.</div>
+          <label>Paste a verified curriculum record (JSON)<textarea id="curriculumJson" rows="8" placeholder='{"level":"Junior School","grade":"Grade 7","learning_area":"Integrated Science","strand":"...","sub_strand":"...","outcomes":["..."],"source":"KICD curriculum design","page":"..."}'></textarea></label>
+          <button id="addCurriculumBtn" class="primary">Save curriculum record</button>
+          <p id="curriculumStatus" class="status"></p><div id="curriculumList" class="project-list"></div>
+        </div>
+      </section>
+    </section>
+    <footer>JengaEdu AI Lesson Studio · Built for Kenyan schools · Teacher review required before classroom use</footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
