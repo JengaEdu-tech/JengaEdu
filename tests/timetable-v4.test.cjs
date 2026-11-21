@@ -65,3 +65,12 @@ test('app includes versioning, lock-aware regeneration and editor actions', () =
   assert.match(source, /function moveTimetableLesson\(/);
   assert.match(source, /function ttmShowGroups\(/);
 });
+
+
+test('includes colourful report-style timetable print layout', () => {
+  assert.match(source, /function timetablePrintGrid\(/);
+  assert.match(source, /jenga-timetable-print/);
+  assert.match(source, /background:#173b72/);
+  assert.match(source, /function printTimetableDocument\(/);
+  assert.match(source, /timetablePrintGrid\(c\)/);
+});
