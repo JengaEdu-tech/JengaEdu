@@ -753,6 +753,117 @@ function renderUnavailableModule(title,description){
 }
 function unavailablePage(title,description){return function(){renderUnavailableModule(title,description)}}
 
+
+/* ================= JENGAEDU PHASE 5 MODULES ================= */
+function phase5Escape(v){return esc(String(v??""))}
+function phase5Can(roles){return !!cloudUser && roles.includes(cloudStaffRole)}
+async function ParentContacts(){
+ const c=document.getElementById("content");
+ if(!cloudReady||!activeSchool?.id){c.innerHTML='<div class="card"><h2>Parent / Guardian Contacts</h2><p>Sign in to a school workspace first.</p></div>';return;}
+ const rows=(db.learners||[]).map(l=>`<tr><td>${phase5Escape(l.adm)}</td><td>${phase5Escape(l.name)}</td><td>${phase5Escape(l.class)}</td><td><input id="pname_${esc(l.id)}" value="${phase5Escape(l.parent||"")}" placeholder="Parent / guardian"></td><td><input id="pphone_${esc(l.id)}" value="${phase5Escape(l.phone||"")}" placeholder="07xx xxx xxx"></td><td><label><input type="checkbox" id="psms_${esc(l.id)}" ${l.parentSmsConsent===true?"checked":""}> SMS</label> <label><input type="checkbox" id="pwa_${esc(l.id)}" ${l.parentWhatsappConsent===true?"checked":""}> WhatsApp</label></td><td><button class="light" onclick="saveParentContact('${esc(l.id)}')">Save</button></td></tr>`).join("");
+ c.innerHTML=`<div class="pagehero"><div><h2>👪 Parent & Guardian Controls</h2><p>Maintain guardian contacts, consent and secure portal access.</p></div></div><div class="card"><h3>Invite a parent or learner to the portal</h3><div class="formgrid"><div class="field"><label>Verified email address</label><input id="portalInviteEmail" type="email" placeholder="parent@example.com"></div><div class="field"><label>Linked learner</label><select id="portalInviteLearner">${(db.learners||[]).map(l=>`<option value="${phase5Escape(l.id)}">${phase5Escape(l.adm)} — ${phase5Escape(l.name)}</option>`).join("")}</select></div><div class="field"><label>Portal role</label><select id="portalInviteRole"><option value="parent">Parent / guardian</option><option value="learner">Learner</option></select></div></div><button onclick="createPortalInvite()">Create secure invitation link</button><p class="small">The recipient must sign in with this exact email. Share the generated link privately. Email dispatch is not configured by this screen.</p><div id="portalInviteResult"></div></div><div class="card"><p class="small">Only record consent after obtaining it from the parent or guardian. Missing consent means the messaging gateway will reject that channel.</p><div class="tablewrap"><table class="table"><thead><tr><th>Adm.</th><th>Learner</th><th>Class</th><th>Parent / guardian</th><th>Phone</th><th>Consent</th><th>Action</th></tr></thead><tbody>${rows||'<tr><td colspan="7">No learners have been registered.</td></tr>'}</tbody></table></div></div>`;
+}
+async function createPortalInvite(){
+ if(!["school_admin","headteacher"].includes(cloudStaffRole)){toast("Only the school administrator or headteacher can invite portal users");return}
+ const email=document.getElementById("portalInviteEmail")?.value.trim().toLowerCase(),learnerId=document.getElementById("portalInviteLearner")?.value,portal_role=document.getElementById("portalInviteRole")?.value;
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email||"")||!learnerId){toast("Enter a valid email and select a learner");return}
+ const {data,error}=await cloud.from("school_portal_invitations").insert({school_id:activeSchool.id,email,portal_role,learner_ids:[String(learnerId)],invited_by:cloudUser.id}).select("token").single();
+ if(error){toast("Invitation failed: "+error.message);return}
+ const link=new URL("portal.html",location.href);link.searchParams.set("school",activeSchool.id);link.searchParams.set("portal_invite",data.token);
+ const result=document.getElementById("portalInviteResult");result.innerHTML=`<p><b>Invitation link created</b></p><input id="portalInviteLink" readonly value="${phase5Escape(link.toString())}"><button class="light" onclick="navigator.clipboard.writeText(document.getElementById('portalInviteLink').value).then(()=>toast('Invitation link copied'))">Copy invitation link</button>`;
+}
+async function saveParentContact(id){
+ if(!["school_admin","headteacher"].includes(cloudStaffRole)){toast("Only the school administrator or headteacher can edit guardian contacts");return}
+ const l=(db.learners||[]).find(x=>String(x.id)===String(id));if(!l)return;
+ l.parent=document.getElementById("pname_"+id)?.value.trim()||"";
+ l.phone=document.getElementById("pphone_"+id)?.value.trim()||"";
+ l.parentSmsConsent=!!document.getElementById("psms_"+id)?.checked;
+ l.parentWhatsappConsent=!!document.getElementById("pwa_"+id)?.checked;
+ await save();toast("Parent contact and consent updated");ParentContacts();
+}
+async function BulkMessaging(){
+ const c=document.getElementById("content");
+ if(!cloudReady||!activeSchool?.id){c.innerHTML='<div class="card"><h2>Bulk Messaging</h2><p>Sign in to a school workspace first.</p></div>';return;}
+ const classes=[...new Set((db.learners||[]).map(x=>x.class).filter(Boolean))];
+ c.innerHTML=`<div class="pagehero"><div><h2>💬 Bulk SMS & WhatsApp</h2><p>Send school notices to verified parent contacts using the configured Supabase messaging gateway.</p></div></div><div class="card"><div class="formgrid"><div class="field"><label>Channel</label><select id="bmChannel"><option value="sms">SMS</option><option value="whatsapp">WhatsApp</option><option value="both">Both channels</option></select></div><div class="field"><label>Class</label><select id="bmClass"><option value="*">All classes</option>${classes.map(x=>`<option>${phase5Escape(x)}</option>`).join("")}</select></div><div class="field"><label>Message type</label><select id="bmType"><option value="school_notice">General school notice</option><option value="fee_reminder">Fee reminder</option><option value="meeting">Parent meeting</option></select></div><div class="field"><label>WhatsApp approved template (if used)</label><input id="bmTemplate" placeholder="approved_template_name"></div></div><div class="field"><label>Message text</label><textarea id="bmText" rows="5" maxlength="1200" placeholder="Write a clear school message..."></textarea></div><div id="bmPreview" class="small"></div><div class="toolbar"><button onclick="previewBulkMessage()">Preview recipients</button><button onclick="sendBulkMessage()">Send campaign</button></div><p class="small">Maximum 200 recipients per campaign. SMS / WhatsApp consent is checked again by the server. Provider acceptance is not proof of delivery. For WhatsApp, configure the approved template and its language in the Edge Function.</p></div><div id="bmResult"></div>`;
+}
+function getBulkRecipients(){
+ const cls=document.getElementById("bmClass")?.value||"*",channel=document.getElementById("bmChannel")?.value||"sms";
+ return (db.learners||[]).filter(l=>(cls==="*"||l.class===cls)&&l.phone&&((channel==="sms"&&l.parentSmsConsent===true)||(channel==="whatsapp"&&l.parentWhatsappConsent===true)||(channel==="both"&&l.parentSmsConsent===true&&l.parentWhatsappConsent===true))).map(l=>({learnerId:String(l.id),phone:String(l.phone).trim(),learner:l}));
+}
+function previewBulkMessage(){
+ const r=getBulkRecipients(),box=document.getElementById("bmPreview");
+ if(box)box.textContent=`${r.length} eligible parent contact(s). ${r.length>200?"Split this campaign into smaller class groups.":"Review the class and consent before sending."}`;
+}
+async function sendBulkMessage(){
+ const channel=document.getElementById("bmChannel")?.value||"sms",textBody=document.getElementById("bmText")?.value.trim()||"",recipients=getBulkRecipients();
+ if(!textBody){toast("Enter a message first");return}if(!recipients.length){toast("No recipients with valid contact and matching consent");return}
+ if(recipients.length>200){toast("Select one class or split into campaigns of 200 or fewer");return}
+ if(!confirm(`Submit ${channel.toUpperCase()} to ${recipients.length} parent contact(s)?`))return;
+ const btn=[...document.querySelectorAll("#content button")].find(b=>b.textContent.includes("Send campaign"));if(btn){btn.disabled=true;btn.textContent="Submitting…"}
+ try{
+  const payload={schoolId:activeSchool.id,channel,recipients:recipients.map(r=>({learnerId:r.learnerId,phone:r.phone})),smsText:textBody,messageType:document.getElementById("bmType")?.value||"school_notice",personalized:false};
+  if(channel==="whatsapp"||channel==="both"){payload.templateName=document.getElementById("bmTemplate")?.value.trim()||"";if(!payload.templateName)throw new Error("Enter the approved WhatsApp template name.");}
+  const {data,error}=await cloud.functions.invoke("send-school-messages",{body:payload});if(error)throw error;if(data?.error)throw new Error(data.error);
+  document.getElementById("bmResult").innerHTML=`<div class="card"><h3>Campaign submitted</h3><p>${phase5Escape(JSON.stringify(data))}</p><p class="small">Submitted means accepted by the provider, not confirmed delivered.</p></div>`;
+  toast("Messaging request submitted");
+ }catch(e){toast("Messaging failed: "+(e.message||e));}
+ finally{if(btn){btn.disabled=false;btn.textContent="Send campaign"}}
+}
+async function SchoolOperations(){
+ const c=document.getElementById("content");if(!cloudReady||!activeSchool?.id){c.innerHTML='<div class="card"><h2>School Operations</h2><p>Sign in to a school workspace first.</p></div>';return;}
+ const {data,error}=await cloud.from("school_operations_tasks").select("*").eq("school_id",activeSchool.id).order("created_at",{ascending:false});
+ if(error){c.innerHTML=`<div class="card"><h2>School Operations</h2><p>${phase5Escape(error.message)}</p><p class="small">Apply the Phase 5 migration first.</p></div>`;return;}
+ const rows=(data||[]).map(t=>`<tr><td>${phase5Escape(t.title)}</td><td>${phase5Escape(t.category)}</td><td>${phase5Escape(t.due_date||"—")}</td><td>${phase5Escape(t.status)}</td><td><select id="task_${t.id}"><option value="open">Open</option><option value="in_progress">In progress</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select> <button class="light" onclick="updateSchoolTask('${t.id}')">Update</button></td></tr>`).join("");
+ c.innerHTML=`<div class="pagehero"><div><h2>🏫 School Operations</h2><p>Track school activities, responsibilities and operational follow-ups.</p></div></div><div class="card"><h3>Add operational task</h3><div class="formgrid"><div class="field"><label>Task</label><input id="taskTitle" placeholder="e.g. Prepare term opening checklist"></div><div class="field"><label>Category</label><select id="taskCategory"><option>Administration</option><option>Academic</option><option>Finance</option><option>Facilities</option><option>Transport</option><option>Health & safety</option><option>General</option></select></div><div class="field"><label>Due date</label><input id="taskDue" type="date"></div></div><button onclick="addSchoolTask()">Add task</button></div><div class="card"><h3>Operations tracker</h3><div class="tablewrap"><table class="table"><thead><tr><th>Task</th><th>Category</th><th>Due</th><th>Status</th><th>Update</th></tr></thead><tbody>${rows||'<tr><td colspan="5">No operational tasks yet.</td></tr>'}</tbody></table></div></div>`;
+}
+async function addSchoolTask(){
+ const title=document.getElementById("taskTitle")?.value.trim();if(!title){toast("Enter a task title");return}
+ const {error}=await cloud.from("school_operations_tasks").insert({school_id:activeSchool.id,title,category:document.getElementById("taskCategory").value,due_date:document.getElementById("taskDue").value||null,created_by:cloudUser.id});
+ if(error){toast(error.message);return}toast("Task added");SchoolOperations();
+}
+async function updateSchoolTask(id){
+ const status=document.getElementById("task_"+id)?.value;const {error}=await cloud.from("school_operations_tasks").update({status,updated_at:new Date().toISOString()}).eq("id",id).eq("school_id",activeSchool.id);
+ if(error){toast(error.message);return}toast("Task updated");SchoolOperations();
+}
+async function QuestionPapers(){
+ const c=document.getElementById("content");if(!cloudReady||!activeSchool?.id){c.innerHTML='<div class="card"><h2>AI Question Papers</h2><p>Sign in to a school workspace first.</p></div>';return;}
+ const {data,error}=await cloud.from("school_ai_question_papers").select("id,title,class_name,subject,term,academic_year,created_at").eq("school_id",activeSchool.id).order("created_at",{ascending:false}).limit(30);
+ const rows=(data||[]).map(p=>`<tr><td>${phase5Escape(p.title)}</td><td>${phase5Escape(p.class_name)}</td><td>${phase5Escape(p.subject)}</td><td>${phase5Escape(p.term||"")}</td><td>${new Date(p.created_at).toLocaleDateString()}</td></tr>`).join("");
+ c.innerHTML=`<div class="pagehero"><div><h2>🤖 AI Question Paper Studio</h2><p>Prepare application-based assessments aligned to Kenya CBC/CBE. Teacher review is required before printing or issuing.</p></div></div><div class="card"><div class="formgrid"><div class="field"><label>Paper title</label><input id="qpTitle" placeholder="Grade 7 Mathematics End Term"></div><div class="field"><label>Class / Grade</label><input id="qpClass" placeholder="Grade 7"></div><div class="field"><label>Subject</label><input id="qpSubject" placeholder="Mathematics"></div><div class="field"><label>Term</label><input id="qpTerm" value="${phase5Escape(db.settings.term||"Term 1")}"></div><div class="field"><label>Academic year</label><input id="qpYear" value="${phase5Escape(db.settings.year||"2026")}"></div><div class="field"><label>Learning area / strands</label><input id="qpStrands" placeholder="Enter strands and sub-strands"></div></div><div class="field"><label>Assessment instructions / learning outcomes</label><textarea id="qpOutcomes" rows="4" placeholder="Paste the relevant curriculum outcomes and assessment focus."></textarea></div><div class="field"><label>Teacher-created question content (draft)</label><textarea id="qpBody" rows="8" placeholder="Enter or paste reviewed questions here. This stores your draft; it does not claim to generate verified AI content."></textarea></div><div class="toolbar"><button onclick="generateQuestionPaperWithAI()">✨ Generate AI draft</button><button class="secondary" onclick="saveQuestionPaperDraft()">Save manual draft</button></div><div id="qpPreview"></div></div><div class="card"><h3>Saved paper drafts</h3>${error?`<p>${phase5Escape(error.message)} — apply the Phase 5 migration.</p>`:`<div class="tablewrap"><table class="table"><thead><tr><th>Title</th><th>Class</th><th>Subject</th><th>Term</th><th>Created</th></tr></thead><tbody>${rows||'<tr><td colspan="5">No papers saved yet.</td></tr>'}</tbody></table></div>`}</div>`;
+}
+async function generateQuestionPaperWithAI(){
+ const title=document.getElementById("qpTitle")?.value.trim(),className=document.getElementById("qpClass")?.value.trim(),subject=document.getElementById("qpSubject")?.value.trim(),strands=document.getElementById("qpStrands")?.value.trim(),outcomes=document.getElementById("qpOutcomes")?.value.trim();
+ if(!title||!className||!subject||!strands||!outcomes){toast("Complete title, class, subject, strands and learning outcomes first");return}
+ const preview=document.getElementById("qpPreview");preview.textContent="Generating teacher-reviewable assessment…";
+ try{
+  const {data,error}=await cloud.functions.invoke("generate-ai-question-paper",{body:{schoolId:activeSchool.id,title,className,subject,term:document.getElementById("qpTerm").value,year:document.getElementById("qpYear").value,strands,outcomes,questionCount:15}});
+  if(error)throw error;if(data?.error)throw new Error(data.error);
+  const paper=data.paper;const paper_json={...paper,strands,outcomes,status:"ai_draft_review_required",model:data.model,review_required:true};
+  const {error:saveError}=await cloud.from("school_ai_question_papers").insert({school_id:activeSchool.id,title,class_name:className,subject,term:document.getElementById("qpTerm").value,academic_year:document.getElementById("qpYear").value,curriculum:"Kenya CBC/CBE",paper_json,created_by:cloudUser.id});
+  if(saveError)throw saveError;
+  preview.innerHTML=`<div class="card"><h3>AI draft generated — teacher review required</h3><p>${phase5Escape(paper.instructions||"")}</p><ol>${paper.questions.map(q=>`<li><b>${phase5Escape(q.question)}</b> <span class="small">(${phase5Escape(q.marks)} marks)</span><p class="small">${phase5Escape(q.context||"")}</p></li>`).join("")}</ol><p class="small">Review all content, expected answers, marks and curriculum alignment before printing or issuing. AI output is a draft, not KICD-approved material.</p></div>`;
+  toast("AI paper draft saved");
+ }catch(e){preview.textContent="Generation failed: "+(e.message||e);toast("AI question paper generation failed")}
+}
+async function saveQuestionPaperDraft(){
+ const title=document.getElementById("qpTitle")?.value.trim(),class_name=document.getElementById("qpClass")?.value.trim(),subject=document.getElementById("qpSubject")?.value.trim();
+ if(!title||!class_name||!subject){toast("Title, class and subject are required");return}
+ const paper_json={strands:document.getElementById("qpStrands").value,outcomes:document.getElementById("qpOutcomes").value,draft:document.getElementById("qpBody").value,status:"teacher_draft",curriculum:"Kenya CBC/CBE"};
+ const {error}=await cloud.from("school_ai_question_papers").insert({school_id:activeSchool.id,title,class_name,subject,term:document.getElementById("qpTerm").value,academic_year:document.getElementById("qpYear").value,curriculum:"Kenya CBC/CBE",paper_json,created_by:cloudUser.id});
+ if(error){toast(error.message);return}toast("Question paper draft saved");QuestionPapers();
+}
+async function SchoolPortal(){
+ const c=document.getElementById("content");if(!cloudReady||!cloudUser){c.innerHTML='<div class="card"><h2>Parent / Learner Portal</h2><p>Sign in with the email address that received the portal invitation.</p></div>';return;}
+ const schoolId=activeSchool?.id;if(!schoolId){c.innerHTML='<div class="card"><h2>Portal access</h2><p>Select the school workspace connected to your invitation.</p></div>';return;}
+ const token=new URLSearchParams(location.search).get("portal_invite");
+ if(token){const {error}=await cloud.rpc("accept_school_portal_invitation",{p_token:token});if(error){c.innerHTML=`<div class="card"><h2>Invitation could not be accepted</h2><p>${phase5Escape(error.message)}</p></div>`;return}history.replaceState({},document.title,location.pathname);toast("Portal invitation accepted");}
+ const {data,error}=await cloud.rpc("get_my_portal_learners",{p_school_id:schoolId});
+ if(error){c.innerHTML=`<div class="card"><h2>Portal</h2><p>${phase5Escape(error.message)}</p></div>`;return;}
+ const cards=(data||[]).map(l=>`<div class="card"><h3>${phase5Escape(l.name)}</h3><p>Admission: ${phase5Escape(l.adm)} · Class: ${phase5Escape(l.class)}</p><p>Parent / guardian: ${phase5Escape(l.parent||"Not recorded")}</p><p>Academic updates and reports are displayed only when the school has published them to the linked learner record.</p></div>`).join("");
+ c.innerHTML=`<div class="pagehero"><div><h2>🎓 Parent & Learner Portal</h2><p>Only learner records explicitly linked to your verified account are returned.</p></div></div>${cards||'<div class="card">No learner profile is linked to this account yet. Contact the school administrator.</div>'}`;
+}
+
 let currentPage="Dashboard";
 
 function SchoolControls(){
@@ -788,13 +899,13 @@ function show(page){
     const pages={
       Dashboard:dashboard,Learners,Alumni,
       SchoolControls,
-      SchoolOperations:unavailablePage("School Operations","Manage daily school operations and administrative workflows."),
+      SchoolOperations,
       Teachers,StaffManagement,Marks,Exams,
-      QuestionPapers:unavailablePage("AI Question Papers","Create and manage curriculum-aligned examination papers."),
+      QuestionPapers,
       LibraryInventory:unavailablePage("Library & Inventory","Manage library resources, stock and issued items."),
       Rankings,Attendance,Reports,Performance,Fees,Capitation,Timetable,EventsCalendar,Opportunities,Subjects,Settings,
-      ParentContacts:unavailablePage("Parent Contacts","Manage parent and guardian contact records."),
-      BulkMessaging:unavailablePage("Bulk Messaging","Prepare and send school communications to selected recipients."),
+      ParentContacts,
+      BulkMessaging,
       Billing
     };
     (pages[page]||dashboard)();

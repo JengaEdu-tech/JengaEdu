@@ -1,55 +1,23 @@
-# JengaEdu AI Question Paper Generator
+# JengaEdu AI Question Paper Generator — Phase 5
 
-## What it adds
-Teachers can generate:
-- Topical Tests
-- Mid Term Exams
-- End Term Exams
-- Revision Papers
+Teachers can generate structured draft assessments for Kenya CBC/CBE using teacher-supplied strands, sub-strands and learning outcomes.
 
-The generator requires:
-- Class
-- Subject
-- Term and year
-- Topics/learning areas
-- Number of A4 pages
-- Questions per page
-- Marks per question
-- Teacher / prepared-by name
-- Optional teacher instructions
-
-Every generated question is labelled **APPLICATION** and the built-in engine uses real-life, school, home, community, farm, business, experiment, design and problem-solving situations.
-
-## AI connection
-The generator works without an external AI key using its built-in application-question engine.
-
-For real AI generation, open **AI Question Papers → AI Connection** and configure an OpenAI-compatible chat-completions endpoint, API key and model.
-
-For production, do not expose a permanent API key in browser code. The recommended deployment is to put the AI request behind a server/Supabase Edge Function and keep the secret on the server.
-
-## Printing rules
-Question papers are designed as exact A4 portrait pages. The teacher-selected page count becomes the number of A4 pages in the generated paper. The last page contains:
-- Prepared by / teacher name
-- Teacher signature line
-- Date line
-
-Each page includes:
-- JENGAEDU COMPREHENSIVE SCHOOL
-- Motto
-- Assessment type
-- Class
-- Subject
-- Term
-- Academic year
-- Duration
-- Total marks
-- Learner name
-- Admission number
-- Instructions
-- Page number
-
-## Shared database
-Generated papers are stored in `questionPapers` in the shared school state, so authenticated teachers using the same Supabase database can access the generated-paper history.
+## Workflow
+1. Open **AI Question Papers**.
+2. Enter title, class, subject, term/year, strands and the relevant learning outcomes.
+3. Select **Generate AI draft**.
+4. Review all questions, expected answers, marks and curriculum alignment.
+5. Edit and approve the paper before printing or issuing.
 
 ## Security
-API keys entered in the browser are stored only in that browser's local storage and are not added to the shared Supabase school database. A server-side AI proxy is recommended for production.
+Generation runs through `supabase/functions/generate-ai-question-paper`. The function checks the signed-in Supabase user and active school membership role. The OpenAI API key is stored as a Supabase Edge Function secret (`OPENAI_API_KEY`) and is never sent to the browser. Set `OPENAI_MODEL` optionally; default is `gpt-4.1-mini`.
+
+## Curriculum accuracy
+The model uses the curriculum strands and outcomes entered by the teacher. It must not invent official KICD codes or claim official approval. AI output is a draft and requires professional teacher review.
+
+## Deploy
+```bash
+supabase functions deploy generate-ai-question-paper
+supabase secrets set OPENAI_API_KEY=YOUR_PRIVATE_OPENAI_API_KEY
+supabase secrets set OPENAI_MODEL=gpt-4.1-mini
+```

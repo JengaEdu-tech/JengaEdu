@@ -131,3 +131,8 @@ JengaEdu's current commercial subscription proposal is KES 4,000 per school per 
 ## Community calendar and opportunities
 
 The signed-in workspace now includes a school events calendar and school-published opportunities/vacancies. Public visitors can browse published listings without school accounts at `community/`. Apply `Supabase/migration/202611140002_school_calendar_opportunities.sql` after the multi-school foundation. See `COMMUNITY-CALENDAR-AND-OPPORTUNITIES-UPGRADE.md` for deployment and tests.
+
+
+## Phase 5 upgrade
+
+See `JENGAEDU-PHASE-5-UPGRADE.md` and `JENGAEDU-PHASE-5-CHANGELOG.md` for the multi-user portal, school operations, restored parent controls, bulk messaging, and AI question-paper deployment. Apply the Phase 5 SQL migration and deploy the documented Edge Functions before using these features with live data.
