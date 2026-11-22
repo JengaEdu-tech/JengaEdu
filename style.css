@@ -1683,3 +1683,69 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media print{
  .mobile-appbar,.sidebar-scrim{display:none!important}
 }
+
+/* JENGAEDU DOCUMENT POLISH — focused upgrades for classroom and finance registers */
+.jenga-print-document{font-family:Arial,Helvetica,sans-serif;color:#172033;background:#fff;box-sizing:border-box;width:100%;}
+.jenga-print-heading{display:flex;align-items:center;justify-content:center;gap:12px;text-align:center;border-bottom:3px solid #c89b36;padding:0 0 9px;margin:0 0 9px;}
+.jenga-print-heading img{max-width:62px;max-height:58px;object-fit:contain;}
+.jenga-print-heading h1{font-size:19px;line-height:1.2;color:#173f70;margin:0 0 3px;font-weight:800;}
+.jenga-print-heading p{font-size:9px;line-height:1.35;color:#52657a;margin:2px 0;font-weight:700;letter-spacing:.25px;}
+.jenga-print-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:7px 14px;padding:7px 9px;margin:7px 0 10px;background:#f1f5fa;border:1px solid #d4deea;border-radius:4px;font-size:8px;line-height:1.35;}
+.jenga-print-meta b{color:#234d78;}
+.jenga-print-signatures{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:12px;padding-top:8px;border-top:1px solid #9aa9b9;font-size:8px;line-height:1.5;}
+.jenga-print-footnote{margin:7px 0 0;text-align:center;font-size:7px;color:#64748b;}
+.jenga-class-list-table{table-layout:fixed;}
+.jenga-class-list-table th{background:#1d4776!important;color:#fff!important;font-size:8px!important;padding:7px 5px!important;}
+.jenga-class-list-table td{font-size:8.5px!important;padding:6px 5px!important;height:25px;}
+.jenga-class-list-table th:nth-child(1){width:7%;}
+.jenga-class-list-table th:nth-child(2){width:17%;}
+.jenga-class-list-table th:nth-child(3){width:31%;}
+.jenga-class-list-table th:nth-child(4){width:11%;}
+.jenga-class-list-table th:nth-child(5){width:12%;}
+.jenga-class-list-table th:nth-child(6){width:22%;}
+.jenga-class-list-table .jenga-learner-name{font-weight:700;}
+.manual-fee-sheet .jenga-print-heading{margin-bottom:7px;}
+.manual-fee-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.manual-fee-table th,.manual-fee-table td{border:1px solid #8495a8;text-align:center;vertical-align:middle;}
+.manual-fee-table th{background:#1d4776;color:#fff;font-size:7.2px;line-height:1.2;padding:6px 3px;}
+.manual-fee-table td{font-size:8px;padding:4px 3px;height:27px;}
+.manual-fee-table th:nth-child(1){width:4%;}
+.manual-fee-table th:nth-child(2){width:10%;}
+.manual-fee-table th:nth-child(3){width:19%;}
+.manual-fee-table th:nth-child(4){width:7%;}
+.manual-fee-table th:nth-child(5){width:7%;}
+.manual-fee-table th:nth-child(6),.manual-fee-table th:nth-child(7),.manual-fee-table th:nth-child(8){width:11%;}
+.manual-fee-table th:nth-child(9){width:8%;}
+.manual-fee-table th:nth-child(10){width:8%;}
+.manual-fee-table th:nth-child(11){width:4%;}
+.manual-fee-table .mf-name{text-align:left;font-weight:700;}
+.manual-fee-sheet .mf-instruction{font-size:8px;color:#475569;margin:4px 0 8px;}
+.marks-teacher-line{display:flex;justify-content:space-between;gap:10px;margin:8px 0;font-size:8px;}
+.jenga-manual-marks-table{table-layout:fixed;}
+.jenga-manual-marks-table th{background:#1d4776!important;color:#fff!important;font-size:8px!important;padding:7px 5px!important;}
+.jenga-manual-marks-table td{font-size:8.5px!important;padding:5px!important;height:31px;}
+.jenga-manual-marks-table th:nth-child(1){width:7%;}
+.jenga-manual-marks-table th:nth-child(2){width:16%;}
+.jenga-manual-marks-table th:nth-child(3){width:34%;}
+.jenga-manual-marks-table th:nth-child(4){width:12%;}
+.jenga-manual-marks-table th:nth-child(5){width:10%;}
+.jenga-manual-marks-table th:nth-child(6){width:21%;}
+.jenga-manual-marks-table .marks-learner-name{text-align:left;font-weight:700;}
+@media print{
+  .jenga-print-document{break-inside:auto;page-break-inside:auto;}
+  .jenga-print-heading,.jenga-print-meta,.jenga-print-signatures{break-inside:avoid;page-break-inside:avoid;}
+  .jenga-class-list-table thead,.manual-fee-table thead,.jenga-manual-marks-table thead{display:table-header-group;}
+  .jenga-class-list-table tr,.manual-fee-table tr,.jenga-manual-marks-table tr{break-inside:avoid;page-break-inside:avoid;}
+  .jenga-class-list-table th,.manual-fee-table th,.jenga-manual-marks-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .manual-fee-sheet{padding:0!important;}
+}
+
+/* JengaEdu premium multi-page exports: fees, meals, class and marks registers */
+.pdf-export-content-stage .schoolhead,
+.pdf-export-content-stage .jenga-print-heading{break-inside:avoid!important;page-break-inside:avoid!important}
+.pdf-export-content-stage .register-table thead{display:table-header-group!important}
+.pdf-export-content-stage .register-table tr{break-inside:avoid!important;page-break-inside:avoid!important}
+.pdf-export-content-stage .register-table th{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+.pdf-export-content-stage .register-meta,
+.pdf-export-content-stage .jenga-print-meta{color:#26384d!important}
+.pdf-export-content-stage .meal-register-table td{height:27px!important}
