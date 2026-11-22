@@ -17,99 +17,45 @@
 
 <body>
 
-<!-- ================= LOGIN ================= -->
-
+<!-- ================= PREMIUM LOGIN ================= -->
 <div id="login" class="login">
-  <div class="loginbox">
-
-    <div class="logo">J</div>
-
-    <h1>JengaEdu</h1>
-    <p>Building Better Schools, Together.</p>
-
-    <div class="field">
-      <label for="loginUser">Email</label>
-      <input
-        id="loginUser"
-        type="email"
-        placeholder="admin@example.com"
-        autocomplete="username"
-      >
-    </div>
-
-    <div class="field" style="margin-top:12px">
-      <label for="loginPass">Password</label>
-      <input
-        id="loginPass"
-        type="password"
-        placeholder="Enter your password"
-        autocomplete="current-password"
-      >
-    </div>
-
-    <div class="field" style="margin-top:12px">
-      <label for="loginPhone">Phone number</label>
-      <input
-        id="loginPhone"
-        type="tel"
-        inputmode="tel"
-        placeholder="0712345678 or +254712345678"
-        autocomplete="tel"
-      >
-      <small>Enter a valid Kenyan phone number to continue.</small>
-    </div>
-
-    <button
-      class="login-submit"
-      id="loginButton"
-      style="width:100%;margin-top:16px"
-      onclick="login()"
-    >
-      Sign In
-    </button>
-<button
-  type="button"
-  class="light"
-  style="width:100%;margin-top:9px"
-  onclick="signInWithGitHub()"
->
-  Continue with GitHub
-</button>
-    <button
-      class="light"
-      style="width:100%;margin-top:9px"
-      onclick="forgot()"
-    >
-      Forgot Password?
-    </button>
-
-    <small
-      id="loginMode"
-      style="display:block;text-align:center;color:#64748b;margin-top:14px"
-    >
-      Secure Supabase login • Shared school database
-    </small>
-
-    <div
-      id="loginError"
-      style="
-        display:none;
-        margin-top:12px;
-        padding:10px;
-        border-radius:8px;
-        background:#fee2e2;
-        color:#991b1b;
-        font-size:14px;
-      "
-    ></div>
-
+  <div class="login-shell">
+    <section class="login-story">
+      <a class="login-brand" href="index.html"><span class="login-brandmark">J</span><span>JengaEdu<small>Building Better Schools, Together.</small></span></a>
+      <div class="login-story-copy">
+        <span class="login-eyebrow">YOUR SCHOOL. ONE CONNECTED WORKSPACE.</span>
+        <h2>Make every school day <em>work better.</em></h2>
+        <p>Bring learner records, teaching, finance and school operations together in one secure place.</p>
+        <div class="login-benefits"><span>✓ Learner & staff records</span><span>✓ Fees, finance & reports</span><span>✓ Teaching & learning tools</span></div>
+      </div>
+      <div class="login-story-foot">Designed for ECDE, Primary, Junior and Senior Secondary schools.</div>
+    </section>
+    <section class="login-panel">
+      <div class="login-panel-head"><div class="logo">J</div><h1>Welcome back</h1><p>Sign in to your school workspace</p></div>
+      <div class="field"><label for="loginUser">School email</label><input id="loginUser" type="email" placeholder="admin@school.ac.ke" autocomplete="username"></div>
+      <div class="field"><label for="loginPass">Password</label><input id="loginPass" type="password" placeholder="Enter your password" autocomplete="current-password"></div>
+      <div class="field login-phone-field"><label for="loginPhone">Phone number</label><input id="loginPhone" type="tel" inputmode="tel" placeholder="0712345678 or +254712345678" autocomplete="tel"><small>Enter a valid Kenyan phone number to continue.</small></div>
+      <button class="login-submit" id="loginButton" style="width:100%;margin-top:17px" onclick="login()">Sign in to JengaEdu <span>→</span></button>
+      <div class="login-divider"><span>OR</span></div>
+      <button type="button" class="light login-alt" onclick="signInWithGitHub()">Continue with GitHub</button>
+      <button class="light login-alt" onclick="forgot()">Forgot password?</button>
+      <small id="loginMode" class="login-mode">Secure sign-in powered by Supabase.</small>
+      <div id="loginError" class="login-error"></div>
+      <p class="login-register">New to JengaEdu? <a href="register.html">Register your school</a></p>
+      <a class="login-back" href="index.html">← Back to JengaEdu homepage</a>
+    </section>
   </div>
 </div>
-
 
 <!-- ================= APPLICATION ================= -->
 
 <div id="app" class="app hidden">
+  <div class="mobile-appbar no-print">
+    <button type="button" class="mobile-menu-toggle" aria-label="Open navigation" aria-expanded="false" onclick="toggleJengaSidebar()">☰</button>
+    <a href="index.html" class="mobile-appbrand"><span>J</span> JengaEdu</a>
+    <button type="button" class="mobile-logout" onclick="logout()" aria-label="Log out">↗</button>
+  </div>
+  <button type="button" class="sidebar-scrim no-print" id="sidebarScrim" aria-label="Close navigation" onclick="toggleJengaSidebar(false)"></button>
 
   <aside class="sidebar">
 
@@ -300,7 +246,7 @@
           class="small"
           style="margin-top:4px;color:#2563eb;font-weight:800"
         >
-          System Version 3 • Bright colours • Term-aware fees & subjects
+          Your school workspace • Secure, connected and term-aware
         </div>
       </div>
 
@@ -352,5 +298,18 @@
 <!-- Existing application logic -->
 <script src="app.js?v=20261121-dashboard-guard-v1"></script>
 
+<script>
+function toggleJengaSidebar(force){
+  const side=document.querySelector('.sidebar'),scrim=document.getElementById('sidebarScrim'),toggle=document.querySelector('.mobile-menu-toggle');
+  if(!side)return;
+  const open=typeof force==='boolean'?force:!side.classList.contains('sidebar-open');
+  side.classList.toggle('sidebar-open',open);
+  if(scrim)scrim.classList.toggle('scrim-open',open);
+  if(toggle)toggle.setAttribute('aria-expanded',String(open));
+}
+document.addEventListener('click',function(e){
+  if(e.target.closest('.sidebar .nav button')||e.target.closest('.sidebar .nav-link'))toggleJengaSidebar(false);
+});
+</script>
 </body>
 </html>
