@@ -25,6 +25,15 @@ footer{background:#101a49;color:#c6cee4;padding:34px 0 22px;font-size:12px}.foot
 @media(max-width:1000px){.navlinks{gap:14px}.navlinks>a:not(.btn){display:none}.features{grid-template-columns:repeat(2,1fr)}.hero-grid{gap:30px}}
 @media(max-width:720px){header{height:68px}.container{width:min(100% - 32px,560px)}.menu{display:block}.navlinks{display:none;position:absolute;top:68px;left:0;right:0;background:#fff;padding:17px 22px 22px;border-bottom:1px solid var(--line);box-shadow:0 18px 25px #1a2c5012;flex-direction:column;align-items:stretch;gap:12px}.navlinks.open{display:flex}.navlinks>a:not(.btn){display:block;padding:8px 4px}.navlinks .btn{text-align:center}.hero{padding:53px 0 60px}.hero-grid{grid-template-columns:1fr;gap:28px}.hero-copy{font-size:16px}h1{font-size:clamp(42px,12vw,58px);letter-spacing:-2.5px}.preview-wrap{margin:4px 8px}.float-one{right:-7px}.float-two{left:-8px}.proof-row{gap:17px}.proof-row span{font-size:10px}section{padding:65px 0}.steps{grid-template-columns:1fr}.price-card{grid-template-columns:1fr;text-align:center;padding:25px}.price-points{justify-content:center}.price-card .btn{width:100%}}
 @media(max-width:440px){.features{grid-template-columns:1fr}.dashboard{padding:9px;border-radius:19px}.dash-body{grid-template-columns:78px 1fr;gap:7px}.dash-side{padding:8px 5px}.dash-side div{padding:8px 4px;font-size:8px}.dash-main{padding:9px}.stat{padding:9px;min-height:68px}.stat strong{font-size:18px}.float-card{padding:8px 10px}.float-one{right:-12px}.float-two{left:-12px}.brand{font-size:20px}}
+
+
+/* Overview refinements: clear modules, accessible controls and small-screen layout */
+.feature{min-height:190px;display:flex;flex-direction:column;align-items:flex-start}
+.feature p{max-width:34ch}
+.navlinks a:focus-visible,.btn:focus-visible{outline:3px solid #8fa5ff;outline-offset:3px}
+@media(min-width:1001px){.features{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.feature{padding:25px}}
+@media(max-width:720px){.feature{min-height:0}.section-head{margin-bottom:30px}.hero-actions .btn{flex:1 1 100%}.proof{padding:18px 0}.proof-row{justify-content:flex-start;display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}}
+@media(max-width:440px){.feature{padding:20px}.hero{padding-top:42px}.hero-copy{line-height:1.65}.proof-row span{font-size:10px}}
 </style>
 </head>
 <body>
@@ -40,9 +49,9 @@ footer{background:#101a49;color:#c6cee4;padding:34px 0 22px;font-size:12px}.foot
 <div>
 <span class="pill"><i></i> ONE CONNECTED PLATFORM · EVERY SCHOOL</span>
 <h1>Make every school day <span class="gradient">work better.</span></h1>
-<p class="hero-copy">A smarter, more colourful way to run your school. Bring learners, teachers, finance, exams, attendance and reports together in one organised digital workspace.</p>
+<p class="hero-copy">One connected workspace for Kenyan schools. Manage learners, staff, fees, assessments, attendance, timetables, teaching resources, library books and school stock — all in one organised place.</p>
 <div class="hero-actions"><a class="btn btn-primary" href="register.html">Create your school account <span>→</span></a><a class="btn btn-outline" href="workspace.html">Log in to your school <span>↗</span></a></div>
-<div class="trustline"><span class="check">✓</span> Built for ECDE, Primary, Junior and Senior Secondary schools</div>
+<div class="trustline"><span class="check">✓</span> Designed for ECDE, Primary, Junior and Senior Secondary schools</div>
 </div>
 <div class="preview-wrap"><div class="glow"></div>
 <div class="float-card float-one">Attendance today <b>96.8%</b></div>
@@ -54,19 +63,21 @@ footer{background:#101a49;color:#c6cee4;padding:34px 0 22px;font-size:12px}.foot
 <div class="chart"><div class="charttop"><span>Learning progress</span><span style="color:#0ca886">↗ This term</span></div><div class="bars"><span style="height:38%"></span><span style="height:60%"></span><span style="height:48%"></span><span style="height:78%"></span><span style="height:58%"></span><span style="height:92%"></span><span style="height:72%"></span><span style="height:100%"></span></div></div>
 </div></div></div></div>
 </div></section>
-<div class="proof"><div class="container proof-row"><span><b>✓</b> Learner records</span><span><b>✓</b> School finance</span><span><b>✓</b> Teaching & learning</span><span><b>✓</b> Reports & insights</span></div></div>
-<section id="features"><div class="container"><div class="section-head"><span class="kicker">A COMPLETE SCHOOL WORKSPACE</span><h2>All the moving parts of your school, <span style="color:#5368d4">working together.</span></h2><p>Spend less time chasing paperwork and more time supporting teaching, learning and school growth.</p></div>
+<div class="proof"><div class="container proof-row"><span><b>✓</b> Admissions & learner records</span><span><b>✓</b> Finance & payments</span><span><b>✓</b> Teaching & learning</span><span><b>✓</b> Reports & insights</span></div></div>
+<section id="features"><div class="container"><div class="section-head"><span class="kicker">ONE CONNECTED SCHOOL WORKSPACE</span><h2>See your whole school more clearly. <span style="color:#5368d4">Manage it in one place.</span></h2><p>From admissions and classroom learning to finance, resources and reporting, JengaEdu brings everyday school operations into one organised workspace.</p></div>
 <div class="features">
 <article class="feature"><div class="ico ic1">🎓</div><h3>Learners & admissions</h3><p>Keep learner profiles, class placement, admission details and alumni records organised.</p></article>
 <article class="feature"><div class="ico ic2">👩‍🏫</div><h3>Teachers & staff</h3><p>Manage staff profiles, responsibilities, access and school teams in one place.</p></article>
 <article class="feature"><div class="ico ic3">💳</div><h3>Fees & finance</h3><p>Track fee structures, payments, balances, receipts and financial summaries.</p></article>
 <article class="feature"><div class="ico ic4">📊</div><h3>Exams & performance</h3><p>Enter marks, analyse performance, rank learners and follow progress by subject.</p></article>
 <article class="feature"><div class="ico ic5">📝</div><h3>Reports & documents</h3><p>Prepare professional school reports and documents ready to print or download.</p></article>
-<article class="feature"><div class="ico ic6">🕒</div><h3>Attendance & timetables</h3><p>Coordinate attendance, lessons, teacher timetables and school routines.</p></article>
-<article class="feature"><div class="ico ic7">📚</div><h3>Teaching resources</h3><p>Access teacher tools, question-paper support, library and inventory features.</p></article>
-<article class="feature"><div class="ico ic8">🌍</div><h3>School community</h3><p>Connect with education updates, public opportunities, events and shared resources.</p></article>
+<article class="feature"><div class="ico ic6">🕒</div><h3>Attendance & school routines</h3><p>Record attendance and follow daily school activities and learner participation.</p></article>
+<article class="feature"><div class="ico ic7">📚</div><h3>Timetables & lesson planning</h3><p>Organise class timetables, teacher schedules and lesson planning across school levels.</p></article>
+<article class="feature"><div class="ico ic8">📚</div><h3>Library & book inventory</h3><p>Register textbooks, allocate copies to classes, issue and return books, and track book availability.</p></article>
+<article class="feature"><div class="ico ic1">📦</div><h3>Stores & stationery inventory</h3><p>Track stationery, school supplies, stock movements, low-stock alerts and inventory reports.</p></article>
+<article class="feature"><div class="ico ic4">🌍</div><h3>School community</h3><p>Connect with education updates, public opportunities, events and shared resources.</p></article>
 </div></div></section>
-<section class="band" id="how"><div class="container"><div class="section-head"><span class="kicker">GET STARTED WITH CONFIDENCE</span><h2>Your school. Your workspace. Your control.</h2><p>Start with your school details, set up your team and bring your everyday operations together.</p></div>
+<section class="band" id="how"><div class="container"><div class="section-head"><span class="kicker">A SIMPLE WAY TO GET STARTED</span><h2>Set up once. Work together every day.</h2><p>Give your school a shared digital space, then build it around your classes, people and daily routines.</p></div>
 <div class="steps"><article class="step"><span class="stepno">01 / CREATE</span><h3>Create your school account</h3><p>Submit your school information and set up the first administrator account.</p></article><article class="step"><span class="stepno">02 / SET UP</span><h3>Make it your own</h3><p>Set your school identity, academic structure, classes, staff and preferences.</p></article><article class="step"><span class="stepno">03 / GROW</span><h3>Run your school in one place</h3><p>Use your workspace to manage records, teaching, learning and school operations.</p></article></div></div></section>
 <section class="pricing" id="pricing"><div class="container"><div class="section-head"><span class="kicker">SIMPLE SCHOOL SUBSCRIPTION</span><h2>One clear price. Every academic term.</h2><p>Predictable subscription pricing for your school workspace.</p></div>
 <div class="price-card"><div><div class="price-label">JENGAEDU SCHOOL PLAN</div><div class="price">KSh 4,000 <small>/ school / term</small></div><p class="price-note">A single termly subscription for access to the JengaEdu school portal.</p><div class="price-points"><span>One school workspace</span><span>Term-based billing</span><span>M-Pesa payment option</span></div></div><a class="btn btn-primary" href="register.html">Create school account →</a></div></div></section>
