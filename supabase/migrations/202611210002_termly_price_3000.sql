@@ -3,12 +3,12 @@
 -- Existing invoices and paid referral rewards are intentionally left unchanged.
 begin;
 update public.subscription_plans
-set name='JengaEdu School Termly', monthly_amount=3000, trial_days=60, is_active=true
+set name='JengaEdu School Termly', monthly_amount=4000, trial_days=60, is_active=true
 where id='school-monthly';
 
--- Future referral rewards remain 50% of the first paid term (KSh 1,500).
+-- Future referral rewards remain 50% of the first paid term (KSh 2,000).
 -- Keep historical reward amounts intact while allowing the new amount going forward.
-alter table public.referral_rewards alter column reward_amount set default 1500;
+alter table public.referral_rewards alter column reward_amount set default 2000;
 alter table public.referral_rewards drop constraint if exists referral_rewards_reward_amount_check;
 alter table public.referral_rewards add constraint referral_rewards_reward_amount_check check (reward_amount > 0);
 
