@@ -1,0 +1,60 @@
+
+/* JengaEdu Phase 3 — cohesive module design system */
+:root{--j3-ink:#192744;--j3-muted:#73819a;--j3-line:#e7ebf3;--j3-soft:#f6f8fc;--j3-blue:#315fe8;--j3-violet:#7548d8}
+.jd-module-card{padding:clamp(15px,2vw,25px)!important;border:1px solid var(--j3-line)!important;border-radius:18px!important;background:#fff!important;box-shadow:0 7px 24px rgba(26,43,78,.045)!important}
+.jd-module-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:2px 0 19px;margin-bottom:17px;border-bottom:1px solid #edf0f6}
+.jd-module-heading h2{margin:0;color:var(--j3-ink);font-size:22px;letter-spacing:-.55px;font-weight:850}
+.jd-module-heading p{margin:6px 0 0;color:var(--j3-muted);font-size:12px;line-height:1.55}
+.jd-module-chip{display:inline-flex;align-items:center;white-space:nowrap;padding:8px 12px;border:1px solid #e1e8ff;border-radius:999px;background:#f3f6ff;color:#4262bd;font-size:10px;font-weight:800}
+.jd-module-card .pagehero{padding:0 0 18px;margin-bottom:18px;border-bottom:1px solid #edf0f6;background:transparent!important}
+.jd-module-card .pagehero h2{font-size:22px;letter-spacing:-.55px;color:var(--j3-ink);margin:0}
+.jd-module-card .pagehero p{color:var(--j3-muted);font-size:12px;line-height:1.6;margin:7px 0 0}
+.jd-module-card .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding:0 0 13px;border-bottom:1px solid #edf0f6}
+.jd-module-card .section-title h2{font-size:15px;color:#253452;margin:0;font-weight:800}
+.jd-module-card .toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.jd-module-card .toolbar button,.jd-module-card button{min-height:36px;border-radius:9px;font-weight:700;font-size:11px;letter-spacing:.01em}
+.jd-module-card .toolbar input{min-width:210px;flex:1}
+.jd-module-card .formgrid{gap:14px;margin:14px 0}
+.jd-module-card .field label{display:block;margin-bottom:6px;color:#52627e;font-size:11px;font-weight:800}
+.jd-module-card input,.jd-module-card select,.jd-module-card textarea{min-height:39px;border:1px solid #dfe5ef!important;background:#fbfcff!important;border-radius:9px!important;color:#243451;font-size:12px;padding:9px 11px}
+.jd-module-card input:focus,.jd-module-card select:focus,.jd-module-card textarea:focus{outline:0;border-color:#8da8fa!important;box-shadow:0 0 0 3px rgba(69,105,225,.10)}
+.jd-module-card .tablewrap{width:100%;overflow:auto;border:1px solid #e8edf5;border-radius:12px;background:#fff}
+.jd-module-card table{width:100%;border-collapse:separate;border-spacing:0;min-width:680px}
+.jd-module-card thead th,.jd-module-card th{position:sticky;top:0;z-index:1;background:#f3f6fc!important;color:#52627e!important;padding:12px 11px!important;border-bottom:1px solid #e6ebf4!important;font-size:10px!important;font-weight:850!important;text-transform:uppercase;letter-spacing:.045em;white-space:nowrap}
+.jd-module-card td{padding:11px!important;border-bottom:1px solid #eef1f6!important;color:#3d4c67;font-size:11px;vertical-align:middle}
+.jd-module-card tbody tr:hover{background:#f9fbff}
+.jd-module-card tbody tr:last-child td{border-bottom:0!important}
+.jd-module-card .badge,.jd-module-card .fee-status{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;font-size:9px;font-weight:850}
+.jd-module-card .small{color:#8290a7;font-size:11px;line-height:1.6}
+.jd-module-card .kpi,.jd-module-card .stat{border:1px solid #e9edf5;border-radius:13px;background:linear-gradient(145deg,#fff,#f9fbff);box-shadow:none;padding:15px}
+.jd-module-card .kpi b{font-size:11px;color:#73819a}
+.jd-module-card .kpi h2{font-size:22px;color:#1d2b49;margin:8px 0 0}
+.jd-module-card .empty{padding:26px 15px;color:#8290a7;text-align:center;font-size:12px}
+.learners-page .section-title .toolbar{flex:1}
+.learners-page .section-title .toolbar input{min-width:230px}
+.learners-page .tablewrap table{min-width:1050px}
+.teachers-page .tablewrap table{min-width:760px}
+.exams-page .formgrid{max-width:1050px}
+.marks-page #marktable{border-radius:12px;overflow:auto}
+.report-page .formgrid{padding:15px;border:1px solid #edf0f6;border-radius:13px;background:#fafbfe}
+.fees-page .fee-summary-grid{gap:11px;margin:10px 0 18px}
+.fees-page .fee-summary-grid .kpi{min-width:0}
+.fees-page .tablewrap table{min-width:1050px}
+.capitation-page .grid{gap:12px}
+.capitation-page .tablewrap table{min-width:900px}
+.subjects-page #subout{border-top:1px solid #edf0f6;padding-top:15px}
+.timetable-page #tout{border-radius:13px;overflow:auto}
+.ranking-page,.attendance-page,.performance-page{border-radius:18px}
+@media(max-width:720px){
+ .jd-module-card{padding:14px!important;border-radius:14px!important}
+ .jd-module-heading{align-items:flex-start;flex-direction:column;gap:9px;padding-bottom:14px}
+ .jd-module-heading h2,.jd-module-card .pagehero h2{font-size:19px}
+ .jd-module-chip{font-size:9px}
+ .jd-module-card .section-title{align-items:flex-start;flex-direction:column}
+ .jd-module-card .section-title .toolbar{width:100%}
+ .jd-module-card .toolbar input{min-width:100%;width:100%}
+ .jd-module-card .toolbar button{flex:1 1 auto}
+ .jd-module-card .formgrid{grid-template-columns:1fr!important}
+ .jd-module-card .pagehero{align-items:flex-start;flex-direction:column}
+ .jd-module-card .kpi h2{font-size:19px}
+}
