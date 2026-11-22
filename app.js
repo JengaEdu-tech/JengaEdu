@@ -20,6 +20,9 @@ const DEFAULT_SUPABASE_CONFIG={
 let SHARED_STATE_ID=null;
 let activeSchool=null;
 let cloud=null, cloudReady=false, cloudUser=null, cloudStaffRole="", cloudSyncBusy=false, cloudSavePending=false;
+// TEMPORARY FREE PREVIEW: keep all school workspaces accessible while JengaEdu is tested.
+// Set to false only after the platform owner formally launches subscriptions.
+const JENGAEDU_FREE_ACCESS_MODE = true;
 let cloudBaseDb=null, cloudLastUpdatedAt=0, cloudRefreshTimer=null, invitedSessionNeedsPassword=false, subscriptionRestricted=false, subscriptionAccessIssue="";
 let cloudConfigFingerprint="";
 
@@ -110,6 +113,10 @@ function saveCloudSetup(){
   }else toast("Could not initialize Supabase");
 }
 async function checkSubscriptionAccess(schoolId){
+ // Billing is deliberately non-enforcing during the free preview. This bypasses
+ // subscription status/expiry checks only; school membership and Supabase access
+ // controls continue to protect each school's data.
+ if(JENGAEDU_FREE_ACCESS_MODE){subscriptionRestricted=false;subscriptionAccessIssue="";return false;}
  if(!cloud||!schoolId){subscriptionRestricted=!!schoolId;subscriptionAccessIssue=schoolId?"Supabase is not connected.":"";return subscriptionRestricted;}
  const {data,error}=await cloud.from("school_subscriptions").select("status,trial_ends_at,current_period_end,grace_ends_at").eq("school_id",schoolId).maybeSingle();
  if(error||!data){
@@ -993,6 +1000,11 @@ async function Billing(){
  const content=document.getElementById("content");
  if(!cloud||!cloudUser||!activeSchool?.id){content.innerHTML='<div class="card"><h2>Subscription & Payments</h2><p>Please sign in to your school account to view billing.</p></div>';return;}
  content.innerHTML='<div class="card"><h2>💳 Subscription & Payments</h2><p>Loading your school subscription…</p></div>';
+ if(JENGAEDU_FREE_ACCESS_MODE){
+  content.innerHTML=`<div class="pagehero"><div><h2>🎉 JengaEdu Free Preview</h2><p>${esc(activeSchool.name)} · Your school can use JengaEdu without subscription charges during the testing period.</p></div><span class="badge bright">FREE ACCESS</span></div>
+  <div class="card"><h3>Subscription payments are temporarily suspended</h3><p>All participating schools may use the system free of charge while JengaEdu is being tested, verified and improved.</p><ul><li>No subscription payment is required at this stage.</li><li>No school will be blocked because of an unpaid or expired subscription.</li><li>Your school records remain subject to the normal account permissions and data-protection controls.</li><li>Schools will be informed before a paid subscription system is introduced.</li></ul><p class="small">The payment feature is being kept in the project for a future launch, but it is not active during this free preview.</p></div>`;
+  return;
+ }
  const canPay=['school_admin','bursar'].includes(cloudStaffRole);
  const [subRes,invoiceRes]=await Promise.all([
   cloud.from('school_subscriptions').select('status,trial_started_at,trial_ends_at,current_period_start,current_period_end,grace_ends_at').eq('school_id',activeSchool.id).maybeSingle(),
