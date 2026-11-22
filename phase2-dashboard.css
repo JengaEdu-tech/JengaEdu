@@ -1,0 +1,50 @@
+
+/* JengaEdu Phase 2 — consistent workspace and module design */
+:root{--jd-ink:#17233f;--jd-muted:#71809a;--jd-line:#e7ebf3;--jd-surface:#f6f8fc;--jd-blue:#315fe8;--jd-purple:#7445d6}
+body{background:#f5f7fb;color:var(--jd-ink)}
+.sidebar{background:linear-gradient(180deg,#14224b 0%,#1c2c63 58%,#30266f 100%);box-shadow:8px 0 28px rgba(20,34,75,.10)}
+.sidebar .brand{font-size:18px;letter-spacing:-.35px}
+.nav button{border-radius:11px;font-size:13px;font-weight:650;transition:background .18s ease,transform .18s ease}
+.nav button.active{background:linear-gradient(100deg,rgba(67,111,239,.34),rgba(132,88,220,.27));box-shadow:inset 3px 0 #8da8ff}
+.main{padding:28px clamp(16px,2.6vw,38px) 48px;max-width:1800px}
+.top{position:sticky;top:0;z-index:5;background:rgba(245,247,251,.92);backdrop-filter:blur(12px);padding:12px 4px;border-bottom:1px solid rgba(226,232,242,.75)}
+.top h1{font-size:25px;font-weight:850;letter-spacing:-.8px}
+.card{border:1px solid var(--jd-line);border-radius:17px;box-shadow:0 5px 20px rgba(31,48,82,.045)}
+button{border-radius:10px}
+input,select,textarea{border-radius:10px!important}
+table{border-collapse:separate;border-spacing:0}
+th{background:#f3f6fc;color:#475675;font-size:12px;letter-spacing:.02em}
+td,th{padding:11px 12px;border-bottom:1px solid #edf0f5}
+tr:last-child td{border-bottom:0}
+.jd-welcome{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;min-height:205px;overflow:hidden;padding:30px 34px;margin:2px 0 28px;border-radius:22px;background:linear-gradient(115deg,#182b65 0%,#334db1 58%,#6844bd 100%);color:#fff;box-shadow:0 15px 34px rgba(47,67,151,.16)}
+.jd-welcome:after{content:"";position:absolute;z-index:-1;width:360px;height:360px;border-radius:50%;right:12%;top:-230px;background:rgba(255,255,255,.08)}
+.jd-welcome-copy{max-width:650px}.jd-eyebrow{display:block;color:#8095c4;font-size:10px;font-weight:900;letter-spacing:1.5px;margin-bottom:8px}
+.jd-welcome .jd-eyebrow{color:#c9d8ff}.jd-welcome h2{font-size:clamp(23px,3vw,34px);line-height:1.12;letter-spacing:-1px;margin:0 0 10px;color:#fff}.jd-welcome p{margin:0;color:#dbe5ff;font-size:14px;line-height:1.6;max-width:540px}
+.jd-period{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:8px 12px;border:1px solid rgba(255,255,255,.23);border-radius:999px;background:rgba(255,255,255,.10);font-size:12px;font-weight:750}
+.jd-welcome-art{position:relative;width:210px;height:150px;flex:0 0 210px;display:grid;place-items:center}
+.jd-orbit{position:absolute;border:1px solid rgba(255,255,255,.23);border-radius:50%;transform:rotate(-25deg)}
+.jd-orbit-one{width:190px;height:105px}.jd-orbit-two{width:145px;height:145px}
+.jd-art-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:19px 25px;border:1px solid rgba(255,255,255,.25);border-radius:18px;background:rgba(255,255,255,.13);backdrop-filter:blur(10px);box-shadow:0 12px 25px rgba(14,25,67,.15)}
+.jd-art-card span{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#fff;color:#3456bc;font-size:22px;font-weight:950}
+.jd-art-card strong{font-size:15px}.jd-art-card small{font-size:9px;color:#dce5ff}
+.jd-section{margin:0 0 28px}.jd-section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:14px}
+.jd-section-head h2{font-size:19px;letter-spacing:-.45px;margin:0;color:#1c2a48}.jd-section-head .jd-eyebrow{margin-bottom:5px}.jd-section-note{font-size:11px;color:#8792a7}
+.jd-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.jd-metric{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-height:148px;padding:17px 18px;border:1px solid var(--jd-line);border-radius:16px;background:#fff;box-shadow:0 5px 18px rgba(31,48,82,.035);overflow:hidden}
+.jd-metric:after{content:"";position:absolute;width:95px;height:95px;border-radius:50%;right:-35px;top:-35px;background:currentColor;opacity:.055}
+.jd-metric-icon{display:grid;place-items:center;min-width:33px;height:33px;padding:0 7px;border-radius:10px;background:#edf3ff;color:#315fe8;font-size:15px;font-weight:850;margin-bottom:12px}
+.jd-metric-label{font-size:12px;font-weight:750;color:#687791}.jd-metric strong{font-size:25px;line-height:1.2;letter-spacing:-.7px;margin-top:5px;color:#1c2a48;overflow-wrap:anywhere}.jd-metric small{font-size:10px;color:#97a1b3;margin-top:6px}
+.jd-metric-teal .jd-metric-icon{background:#e6f8f3;color:#119b7d}.jd-metric-purple .jd-metric-icon{background:#f0eaff;color:#7547d7}.jd-metric-orange .jd-metric-icon{background:#fff2e5;color:#d77b25}
+.jd-section-counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.jd-section-counts>div{display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:9px;padding:14px 15px;border:1px solid var(--jd-line);border-radius:14px;background:#fff}
+.jd-section-counts>div>span{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#f0f4ff;font-size:17px}
+.jd-section-counts label{font-size:12px;font-weight:700;color:#61708a}.jd-section-counts strong{font-size:19px;color:#1d2b49}
+.jd-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.jd-quick-actions button{display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;align-items:center;column-gap:12px;text-align:left;padding:15px;background:#fff;color:#1d2b49;border:1px solid var(--jd-line);box-shadow:none;border-radius:14px}
+.jd-quick-actions button:hover{border-color:#b9c9fa;background:#fbfcff;transform:translateY(-2px);box-shadow:0 8px 22px rgba(45,75,150,.08)}
+.jd-quick-actions button>span{grid-row:1/3;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#eef3ff;color:#315fe8;font-size:19px;font-weight:900}
+.jd-quick-actions button b{font-size:12px}.jd-quick-actions button small{font-size:10px;color:#8995a9;font-weight:500;margin-top:3px}
+.jd-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.jd-chart-card{margin:0;padding:19px}.jd-chart-card h3{font-size:14px;margin:0 0 4px}.jd-chart-card p{font-size:11px;color:#8b96aa;margin:0 0 12px}.jd-chart-card .chartbox{height:245px}
+@media(max-width:1050px){.jd-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.jd-section-counts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.main{padding:14px 12px 32px}.top{padding:10px 2px}.top h1{font-size:20px}.jd-welcome{min-height:0;padding:23px 20px;margin-bottom:22px}.jd-welcome-art{display:none}.jd-welcome h2{font-size:25px}.jd-section-head{align-items:flex-start;flex-direction:column;gap:3px}.jd-section-head h2{font-size:17px}.jd-metrics{gap:9px}.jd-metric{min-height:130px;padding:13px}.jd-metric strong{font-size:20px}.jd-section-counts{gap:8px}.jd-section-counts>div{grid-template-columns:32px 1fr auto;padding:10px;gap:6px}.jd-section-counts>div>span{width:30px;height:30px;font-size:14px}.jd-section-counts label{font-size:10px}.jd-section-counts strong{font-size:16px}.jd-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.jd-quick-actions button{grid-template-columns:34px 1fr;padding:11px 9px;column-gap:8px}.jd-quick-actions button>span{width:32px;height:32px;font-size:16px}.jd-quick-actions button b{font-size:11px}.jd-quick-actions button small{font-size:9px}.jd-chart-grid{grid-template-columns:1fr}.jd-chart-card .chartbox{height:220px}.jd-section-note{font-size:10px}}
+@media(max-width:390px){.jd-metrics{grid-template-columns:1fr 1fr}.jd-metric strong{font-size:18px}.jd-section-counts{grid-template-columns:1fr 1fr}}

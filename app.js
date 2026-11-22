@@ -949,41 +949,63 @@ function dashboard(){
   const expected=db.learners.reduce((a,l)=>a+feeFor(l.class),0);
   const schoolName=activeSchool?.name||db.settings.school||"Your School";
   const primary=db.learners.filter(l=>!ecde.includes(l.class)&&!junior.includes(l.class)&&!senior.includes(l.class)).length;
+  const outstanding=Math.max(expected-paid,0);
   document.getElementById("content").innerHTML=`
-  <div class="pagehero dashboard-hero"><div><h2>Welcome to ${esc(schoolName)} 👋</h2><p>Your school overview, academic progress and daily operations in one place.</p></div><span class="badge bright">${esc(db.settings.term)} · ${esc(db.settings.year)}</span></div>
-  <div class="jenga-section-title"><h2>🎓 Learners by school section</h2><span>All education levels at a glance</span></div>
-  <div class="grid dashboard-section-grid">
-    ${stat("Learners",db.learners.length,"👨‍🎓")}
-    ${stat("ECDE",db.learners.filter(l=>ecde.includes(l.class)).length,"🌱")}
-    ${stat("Primary",primary,"📚")}
-    ${stat("Junior",db.learners.filter(l=>junior.includes(l.class)).length,"🎓")}
-    ${stat("Senior Secondary",db.learners.filter(l=>senior.includes(l.class)).length,"🏫")}
-  </div>
-  <div class="jenga-section-title dashboard-overview-heading"><h2>📊 School at a glance</h2><span>Key figures for the current academic period</span></div>
-  <div class="grid dashboard-overview-grid">
-    ${stat("Teachers",db.teachers.length,"👩‍🏫")}
-    ${stat("Fees Collected","KSh "+paid.toLocaleString("en-KE"),"💰")}
-    ${stat("Outstanding","KSh "+Math.max(expected-paid,0).toLocaleString("en-KE"),"📌")}
-    ${stat("Current Term",db.settings.term,"🗓️")}
-  </div>
-  <div class="two dashboard-chart-grid"><div class="card dashboard-chart-card"><h2>📚 Learners by Class</h2><div class="chartbox"><canvas id="classChart"></canvas></div></div><div class="card dashboard-chart-card"><h2>💳 Fee Status</h2><div class="chartbox"><canvas id="feeChart"></canvas></div></div></div>
-  <div class="card dashboard-actions-card"><div class="pagehero"><div><h2>⚡ Quick Actions</h2><p>Jump directly to the most-used school tools.</p></div></div><div class="toolbar dashboard-action-grid">
-    <button onclick="show('Learners')">👨‍🎓 Add Learner</button>
-    <button onclick="show('Marks')">✏️ Enter Marks</button>
-    <button onclick="show('Fees')">💰 Record Fees</button>
-    <button onclick="show('Timetable')">📅 Generate Timetable</button>
-    <button onclick="show('EventsCalendar')">🗓️ School Calendar</button>
-    <button onclick="show('Reports')">📄 Generate Report</button>
-    <button class="success" onclick="show('Billing')">📲 Pay Subscription</button>
-    <button class="light" onclick="show('Settings')">⚙️ School Settings</button>
-  </div></div>`;
+  <section class="jd-welcome">
+    <div class="jd-welcome-copy">
+      <span class="jd-eyebrow">SCHOOL OVERVIEW</span>
+      <h2>Good day, ${esc(schoolName)}.</h2>
+      <p>Your school operations, learning progress and finances — together in one workspace.</p>
+      <div class="jd-period"><span>▣</span> ${esc(db.settings.term)} · ${esc(db.settings.year)}</div>
+    </div>
+    <div class="jd-welcome-art" aria-hidden="true"><div class="jd-orbit jd-orbit-one"></div><div class="jd-orbit jd-orbit-two"></div><div class="jd-art-card"><span>J</span><strong>JengaEdu</strong><small>Building better schools</small></div></div>
+  </section>
+
+  <section class="jd-section">
+    <div class="jd-section-head"><div><span class="jd-eyebrow">YOUR SCHOOL</span><h2>School at a glance</h2></div><span class="jd-section-note">Current academic period</span></div>
+    <div class="jd-metrics">
+      <article class="jd-metric jd-metric-blue"><span class="jd-metric-icon">♙</span><span class="jd-metric-label">Total learners</span><strong>${db.learners.length.toLocaleString("en-KE")}</strong><small>Across all school sections</small></article>
+      <article class="jd-metric jd-metric-teal"><span class="jd-metric-icon">♧</span><span class="jd-metric-label">Teachers</span><strong>${db.teachers.length.toLocaleString("en-KE")}</strong><small>Teaching team records</small></article>
+      <article class="jd-metric jd-metric-purple"><span class="jd-metric-icon">KSh</span><span class="jd-metric-label">Fees collected</span><strong>KSh ${paid.toLocaleString("en-KE")}</strong><small>${esc(db.settings.term)} · ${esc(db.settings.year)}</small></article>
+      <article class="jd-metric jd-metric-orange"><span class="jd-metric-icon">↗</span><span class="jd-metric-label">Outstanding fees</span><strong>KSh ${outstanding.toLocaleString("en-KE")}</strong><small>Estimated current balance</small></article>
+    </div>
+  </section>
+
+  <section class="jd-section">
+    <div class="jd-section-head"><div><span class="jd-eyebrow">ENROLMENT</span><h2>Learners by school section</h2></div><span class="jd-section-note">All education levels</span></div>
+    <div class="jd-section-counts">
+      <div><span>🌱</span><label>ECDE</label><strong>${db.learners.filter(l=>ecde.includes(l.class)).length}</strong></div>
+      <div><span>📚</span><label>Primary</label><strong>${primary}</strong></div>
+      <div><span>🎓</span><label>Junior</label><strong>${db.learners.filter(l=>junior.includes(l.class)).length}</strong></div>
+      <div><span>🏫</span><label>Senior Secondary</label><strong>${db.learners.filter(l=>senior.includes(l.class)).length}</strong></div>
+    </div>
+  </section>
+
+  <section class="jd-section">
+    <div class="jd-section-head"><div><span class="jd-eyebrow">TAKE ACTION</span><h2>Quick actions</h2></div><span class="jd-section-note">Common school tasks</span></div>
+    <div class="jd-quick-actions">
+      <button type="button" onclick="show('Learners')"><span>＋</span><b>Register learner</b><small>Add a new learner record</small></button>
+      <button type="button" onclick="show('Marks')"><span>✎</span><b>Enter marks</b><small>Record assessment results</small></button>
+      <button type="button" onclick="show('Fees')"><span>▤</span><b>Record payment</b><small>Update fee transactions</small></button>
+      <button type="button" onclick="show('Attendance')"><span>✓</span><b>Take attendance</b><small>Update today's register</small></button>
+      <button type="button" onclick="show('Timetable')"><span>▦</span><b>Timetables</b><small>View school schedules</small></button>
+      <button type="button" onclick="show('Reports')"><span>▧</span><b>Generate report</b><small>Prepare school reports</small></button>
+    </div>
+  </section>
+
+  <section class="jd-section jd-analytics">
+    <div class="jd-section-head"><div><span class="jd-eyebrow">INSIGHTS</span><h2>School performance snapshot</h2></div><span class="jd-section-note">Based on saved school records</span></div>
+    <div class="jd-chart-grid">
+      <div class="card jd-chart-card"><h3>Learners by class</h3><p>Distribution of registered learners</p><div class="chartbox"><canvas id="classChart"></canvas></div></div>
+      <div class="card jd-chart-card"><h3>Fee collection status</h3><p>Collected compared with estimated outstanding fees</p><div class="chartbox"><canvas id="feeChart"></canvas></div></div>
+    </div>
+  </section>`;
   if(typeof Chart!=="undefined"){
     const classCanvas=document.getElementById("classChart"),feeCanvas=document.getElementById("feeChart");
-    if(classCanvas)new Chart(classCanvas,{type:"bar",data:{labels:classes,datasets:[{label:"Learners",data:classes.map(c=>db.learners.filter(l=>l.class===c).length),backgroundColor:["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ec4899","#06b6d4","#84cc16"],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});
-    if(feeCanvas)new Chart(feeCanvas,{type:"doughnut",data:{labels:["Collected","Outstanding"],datasets:[{data:[paid,Math.max(expected-paid,0)],backgroundColor:["#10b981","#f59e0b"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}}});
+    if(classCanvas)new Chart(classCanvas,{type:"bar",data:{labels:classes,datasets:[{label:"Learners",data:classes.map(c=>db.learners.filter(l=>l.class===c).length),backgroundColor:"#4775e8",borderRadius:8,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{precision:0},grid:{color:"#edf0f6"}}}}});
+    if(feeCanvas)new Chart(feeCanvas,{type:"doughnut",data:{labels:["Collected","Outstanding"],datasets:[{data:[paid,outstanding],backgroundColor:["#18a889","#f0a34a"],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:"72%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true,boxWidth:8,padding:18}}}}});
   }
 }
-
 function admissionPrefixForClass(className){return junior.includes(className)?"KJ":senior.includes(className)?"KS":"KP"}
 function nextAdmissionNumber(className){
   const prefix=admissionPrefixForClass(className);
