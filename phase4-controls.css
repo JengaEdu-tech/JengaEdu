@@ -1,0 +1,16 @@
+
+/* JengaEdu Phase 4 — School Controls and account actions */
+.jd-controls-page{padding:clamp(15px,2vw,25px)!important}
+.jd-controls-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.jd-control-tile{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:205px;padding:18px;border:1px solid #e6ebf4;border-radius:15px;background:linear-gradient(145deg,#fff,#fafbff)}
+.jd-control-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#edf3ff;font-size:20px}
+.jd-control-tile h3{font-size:14px;margin:0 0 5px;color:#1d2b49}
+.jd-control-tile p{font-size:11px;line-height:1.55;color:#7b879d;margin:0}
+.jd-control-tile strong{font-size:11px;color:#3559bd}
+.jd-control-tile button{margin-top:auto;min-height:36px;border-radius:9px;padding:8px 12px;background:#315fe8;color:#fff;font-size:11px;font-weight:800}
+.jd-control-danger .jd-control-icon{background:#fff0f0}
+.jd-control-danger button,.jd-controls-page button.danger{background:#b83240;color:#fff}
+.jd-controls-note{margin-top:17px;padding:13px 15px;border:1px solid #e6ebf4;border-radius:12px;background:#f7f9fd;color:#64728a;font-size:11px;line-height:1.6}
+.jd-controls-note strong{color:#263654}
+@media(max-width:900px){.jd-controls-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.jd-controls-grid{grid-template-columns:1fr}.jd-control-tile{min-height:175px}.jd-controls-page .jd-module-heading{align-items:flex-start;flex-direction:column}}
