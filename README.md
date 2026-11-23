@@ -1,4 +1,4 @@
-# JengaEdu Primary & Junior School Management System
+# JengaEdu School Management System
 
 Modern, colourful browser-based school management system for PP1–Grade 9.
 
